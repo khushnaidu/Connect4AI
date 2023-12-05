@@ -34,12 +34,10 @@ def check_free_columns(matrix_board: list, matrix_cols: int):
 
 # Take the user input and check it if is valid, return correct index for token place
 def player_token_placement(p_symbol: str, player_name: str, free_columns_index: list, matrix):
-    #  Repeating the player input if it's incorrect or the index is wrong
     if player_name == "AI":
         return monte_carlo_ai_placement(matrix)
 
     while True:
-
         try:
             column_index_place = int(input(f'Choose a column to drop your token.\n => : '))
 
@@ -198,14 +196,12 @@ def board_print(matrix_board: list, columns_print: list, matrix_cols: int):
     # Bottom frame
     print('-' + '----' * (matrix_cols - 1) + '----\n')
 
-
 def winner_print(p_symbol: str, player_name: str):
     print(
         f'\n┌─---------CONGRATULATION-----------┐'
         f'\n            {player_name}                 '
         f'\n└─-------------YOU-WIN--------------┘'
     )
-
 
 def draw_print():
     print(
@@ -233,13 +229,8 @@ while not winner_flag and not end_game_flag:
     # Using for-loop to rotate players turns.
     for player_name, players_symbol in players_dict.items():
 
-        # Printing the gaming board
         board_print(board, columns_print_for_representation, number_of_cols)
-
-        # Checking witch columns have at least one empty space ( checking only the top row )
-        free_columns = check_free_columns(board, number_of_cols)
-
-        # Player choose where to place the token ( in witch column )
+        free_columns = check_free_columns(board, number_of_cols) # Check for free columns (cols w empty on top)
         column_to_place = player_token_placement(players_symbol, player_name, free_columns, board)
 
         # Placing the color token in the board
