@@ -3,7 +3,7 @@ import random
 import copy
 
 
-# First user input possible for selecting game mode. The function return 'P' or 'Any input'
+# Confirm user choice to initiate game
 def start_game():
     while True:
         user_choice = input(
