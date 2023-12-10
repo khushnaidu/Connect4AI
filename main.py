@@ -130,65 +130,62 @@ def another_game_prompt():
 
 # Simple - MCTS - Model
 def monte_carlo_ai_placement(matrix):
-    player_token = "\033[1;31m██\033[0m"
-    ai_token = "\033[1;34m██\033[0m"
-
-    all_first_moves_dict = {}
-    first_move_loc = int()
+    first_move_scores = {}
+    first_move_col = int()
+    player_token = "x"
+    ai_token = "o"
 
     # Number of random played games - simulation
     for game_number in range(100):
         mc_matrix = copy.deepcopy(matrix)
         for counter in range(0, 100):
-            free_cols = check_free_columns(mc_matrix, num_cols)
-            random_place = random.choice(free_cols) - 1
+            free_col = check_free_columns(mc_matrix, num_cols)
+            random_col = random.choice(free_col) - 1
 
             if counter == 0:
-                if random_place not in all_first_moves_dict:
-                    all_first_moves_dict[random_place] = 0
-                first_move_loc = random_place
+                if random_col not in first_move_scores:
+                    first_move_scores[random_col] = 0
+                first_move_col = random_col
 
             if counter % 2 == 0:
-                player_symbol = "x"  # Player
+                player_symbol = ai_token
             else:
-                player_symbol = "o"  # AI
+                player_symbol = player_token
 
             # AI Place random token
-            mc_matrix, mc_r_c_last_token = place_token(
-                mc_matrix, num_rows, random_place, player_symbol
+            mc_matrix, last_token_position  = place_token(
+                mc_matrix, num_rows, random_col, player_symbol
             )
 
             # Flags for Winner or Draw Game
-            mc_winner_flag = winner_check(
+            win_flag  = winner_check(
                 mc_matrix,
                 player_symbol,
-                mc_r_c_last_token,
+                last_token_position ,
                 num_rows,
                 num_cols,
             )
-            mc_end_game_flag = (
-                False
-                if len(check_free_columns(mc_matrix, num_cols)) > 0
-                else True
-            )
-
-            # if any of the flag is raised stop the loop
-            if mc_winner_flag or mc_end_game_flag:
-                # Rewarding system
-                # State Winner
-                if mc_winner_flag:
+            
+            if len(check_free_columns(mc_matrix, num_cols)) > 0:
+                end_game_flag = False
+            else:
+                end_game_flag = True
+            
+            if win_flag  or end_game_flag:
+                # Winner
+                if win_flag :
                     if player_symbol == ai_token:
-                        all_first_moves_dict[first_move_loc] += 6
+                        first_move_scores[first_move_col] += 6
                     elif player_symbol == player_token:
-                        all_first_moves_dict[first_move_loc] -= 4
+                        first_move_scores[first_move_col] -= 4
 
-                # State Draw
-                elif mc_end_game_flag:
-                    all_first_moves_dict[first_move_loc] -= 1
+                # Draw
+                elif end_game_flag:
+                    first_move_scores[first_move_col] -= 1
 
                 break
 
-    sorted_all_moves = sorted(all_first_moves_dict.items(), key=lambda k: (-k[1], k[0]))
+    sorted_all_moves = sorted(first_move_scores.items(), key=lambda k: (-k[1], k[0]))
     return sorted_all_moves[0][0]
 
 
