@@ -21,6 +21,25 @@ def start_game():
             print("\nInvalid input! Please enter (Y) or (N)!")
             continue
 
+# Customize board size
+def custom_board():
+    while True:
+        user_choice = input(
+            "\n\n\n\nWhat size board would you like to play on? (Default is 6x7)"
+            "\n\nPlay on a 6x7 board? (Y/N): "
+        )
+        if user_choice.lower() == "y" or user_choice.lower() == "yes":
+            return 6, 7
+        elif user_choice.lower() == "n" or user_choice.lower() == "no":
+            try:
+                num_rows = int(input("\n\n\n\nPlease enter the number of rows you would like to play on:\n => : "))
+                num_cols = int(input("\n\n\n\nPlease enter the number of columns you would like to play on:\n => : "))
+                break
+            except ValueError:
+                print("\nInvalid input! Please enter a valid integer.")
+                continue
+            
+    return num_rows, num_cols        
 
 # Generate new game board and return index list of columns
 def generate_game_board(rows: int, cols: int):
@@ -187,14 +206,16 @@ def print_game_board(game_board: list, cols_print: list, num_cols: int):
     print("-" + "----" * (num_cols - 1) + "----\n")
 
 # Start game and initialize variables
-gameplay_mode = start_game()
-num_rows, num_cols = 6, 7
+start_game()
+num_rows, num_cols = custom_board()
 players_dict = {}
 players_dict["You"] = "x"  # Player
 players_dict["AI"] = "o"  # AI
 is_winner = False  # Either player wins
 is_game_end = False  # Draw
 is_play_again = False  # New game
+
+
 
 # Create board
 board, cols_print = generate_game_board(num_rows, num_cols)
