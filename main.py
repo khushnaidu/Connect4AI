@@ -208,7 +208,7 @@ while not is_winner and not is_game_end:
             board, num_cols
         )
         column_to_place = new_token_col(
-            players_symbol, player_name, free_columns, board
+            player_name, free_columns, board
         )
 
         board, r_c_last_token = place_token(
