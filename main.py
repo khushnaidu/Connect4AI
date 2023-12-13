@@ -132,13 +132,17 @@ def another_game_prompt():
 def monte_carlo_ai_placement(matrix):
     first_move_scores = {}
     first_move_col = int()
+    num_iterations = 100
+    reward_val = 6
+    punish_val = 4
+    draw_val = 1
     player_token = "x"
     ai_token = "o"
 
     # Number of random played games - simulation
-    for game_number in range(100):
+    for game_number in range(num_iterations):
         mc_matrix = copy.deepcopy(matrix)
-        for counter in range(0, 100):
+        for counter in range(0, num_iterations):
             free_col = check_free_columns(mc_matrix, num_cols)
             random_col = random.choice(free_col) - 1
 
@@ -175,13 +179,13 @@ def monte_carlo_ai_placement(matrix):
                 # Winner
                 if win_flag :
                     if player_symbol == ai_token:
-                        first_move_scores[first_move_col] += 6
+                        first_move_scores[first_move_col] += reward_val
                     elif player_symbol == player_token:
-                        first_move_scores[first_move_col] -= 4
+                        first_move_scores[first_move_col] -= punish_val
 
                 # Draw
                 elif end_game_flag:
-                    first_move_scores[first_move_col] -= 1
+                    first_move_scores[first_move_col] -= draw_val
 
                 break
 
